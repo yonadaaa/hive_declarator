@@ -6,7 +6,7 @@ import plotly.offline as opy
 
 
 def index(request):
-    types_of_ranking = ["cars", "incomes"]
+    types_of_ranking = ["cars", "incomes", "properties"]
     context = {'types_of_ranking': types_of_ranking}
     return render(request, 'polls/index.html', context)
 
@@ -18,7 +18,7 @@ def get_declarations(year):
     url = "https://declarator.org/api/v1/search/sections"
     max_pages = 2
     i = 0
-    while url and i<max_pages:
+    while url and i < max_pages:
         # defining a params dict for the parameters to be sent to the API
         params = {'year': year}
 
@@ -57,6 +57,10 @@ def count_vehicles(declaration):
     return len(declaration["vehicles"])
 
 
+def count_properties(declaration):
+    return len(declaration["real_estates"])
+
+
 def cars(request):
     year = 2018
     counts = count(year, count_vehicles)
@@ -74,13 +78,28 @@ def incomes(request):
     for d in zesty:
         d["count"] = int(d["count"])
 
-    fig = go.Figure(
-        data=[go.Bar(x=[value["name"] for value in zesty],
-                     y=[value["count"] for value in zesty])],
-        layout_title_text="Incomes per person idk"
-    )
-    div = opy.plot(fig, auto_open=False, output_type='div')
+    div = generate_div(zesty)
 
     context = {'rankings': zesty, 'graph': div}
     return render(request, 'polls/display_rankings.html', context)
 
+
+def properties(request):
+    year = 2018
+    counts = count(year, count_properties)
+    zesty = sorted(counts.values(), key=lambda v: v['count'], reverse=True)
+
+    div = generate_div(zesty)
+
+    context = {'rankings': zesty, 'graph': div}
+    return render(request, 'polls/display_rankings.html', context)
+
+
+def generate_div(zesty):
+    fig = go.Figure(
+        data=[go.Bar(x=[value["name"] for value in zesty],
+                     y=[value["count"] for value in zesty])],
+        layout_title_text="Something per person idk"
+    )
+    div = opy.plot(fig, auto_open=False, output_type='div')
+    return div
