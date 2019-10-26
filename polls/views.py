@@ -4,8 +4,8 @@ import requests
 
 
 def index(request):
-    latest_question_list = ["cars", "incomes"]
-    context = {'latest_question_list': latest_question_list}
+    types_of_ranking = ["cars", "incomes"]
+    context = {'types_of_ranking': types_of_ranking}
     return render(request, 'polls/index.html', context)
 
 

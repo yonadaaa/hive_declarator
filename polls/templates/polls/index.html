@@ -1,7 +1,7 @@
-{% if latest_question_list %}
+{% if types_of_ranking %}
     <ul>
-    {% for question in latest_question_list %}
-        <li><a href="/rankings/{{ question }}/">{{ question }}</a></li>
+    {% for ranking in types_of_ranking %}
+        <li><a href="/rankings/{{ ranking }}/">{{ ranking }}</a></li>
     {% endfor %}
     </ul>
 {% else %}
