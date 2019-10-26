@@ -49,7 +49,7 @@ def count(year, counting_function):
 
 
 def count_incomes(declaration):
-    return int(sum(income["size"] for income in declaration["incomes"]))  # convert to int because who cares about kopeks
+    return sum(income["size"] for income in declaration["incomes"])
 
 
 def count_vehicles(declaration):
@@ -60,20 +60,22 @@ def count_properties(declaration):
     return len(declaration["real_estates"])
 
 
-def graph_div(counts, layout_title_text):
+def graph_div(counts, layout_title_text, hover_template):
     fig = go.Figure(
         data=[go.Bar(x=[value["name"] for value in counts],
-                     y=[value["count"] for value in counts])],
-        layout_title_text=layout_title_text
+                     y=[value["count"] for value in counts],
+                     hovertemplate=hover_template,
+                     )],
+        layout_title_text=layout_title_text,
     )
     div = opy.plot(fig, auto_open=False, output_type='div')
     return div
 
 
-def rankings_context(counts, title):
+def rankings_context(counts, title, hover_template):
     sorted_counts = sorted(counts.values(), key=lambda v: v['count'], reverse=True)
 
-    div = graph_div(sorted_counts[:10], title)
+    div = graph_div(sorted_counts[:10], title, hover_template)
 
     return {'rankings': sorted_counts, 'graph': div}
 
@@ -82,18 +84,21 @@ def cars(request):
     year = 2018
     counts = count(year, count_vehicles)
 
-    return render(request, 'polls/display_rankings.html', rankings_context(counts, "Top 10 officials for vehicle ownership"))
+    context = rankings_context(counts, "Top 10 officials for vehicle ownership", "%{y:.0f} vehicles")
+    return render(request, 'polls/display_rankings.html', context)
 
 
 def incomes(request):
     year = 2018
     counts = count(year, count_incomes)
 
-    return render(request, 'polls/display_rankings.html', rankings_context(counts, "Top 10 officials for income"))
+    context = rankings_context(counts, "Top 10 officials for income", "%{y:.0f}₽")
+    return render(request, 'polls/display_rankings.html', context)
 
 
 def properties(request):
     year = 2018
     counts = count(year, count_properties)
 
-    return render(request, 'polls/display_rankings.html', rankings_context(counts, "Top 10 officials for property ownership"))
+    context = rankings_context(counts, "Top 10 officials for property ownership", "%{y:.0f} properties")
+    return render(request, 'polls/display_rankings.html', context)
