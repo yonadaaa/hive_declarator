@@ -4,7 +4,7 @@ import requests
 
 
 def index(request):
-    types_of_ranking = ["cars", "incomes"]
+    types_of_ranking = ["cars", "incomes", "properties"]
     context = {'types_of_ranking': types_of_ranking}
     return render(request, 'polls/index.html', context)
 
@@ -55,6 +55,10 @@ def count_vehicles(declaration):
     return len(declaration["vehicles"])
 
 
+def count_properties(declaration):
+    return len(declaration["real_estates"])
+
+
 def cars(request):
     year = 2018
     counts = count(year, count_vehicles)
@@ -69,8 +73,14 @@ def incomes(request):
     counts = count(year, count_incomes)
     zesty = sorted(counts.values(), key=lambda v: v['count'], reverse=True)
 
-    for d in zesty:
-        d["count"] = str(int(d["count"])) + "₽"
+    context = {'rankings': zesty}
+    return render(request, 'polls/display_rankings.html', context)
+
+
+def properties(request):
+    year = 2018
+    counts = count(year, count_properties)
+    zesty = sorted(counts.values(), key=lambda v: v['count'], reverse=True)
 
     context = {'rankings': zesty}
     return render(request, 'polls/display_rankings.html', context)
