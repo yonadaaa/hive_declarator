@@ -69,5 +69,8 @@ def incomes(request):
     counts = count(year, count_incomes)
     zesty = sorted(counts.values(), key=lambda v: v['count'], reverse=True)
 
+    for d in zesty:
+        d["count"] = str(int(d["count"])) + "₽"
+
     context = {'rankings': zesty}
     return render(request, 'polls/display_rankings.html', context)
