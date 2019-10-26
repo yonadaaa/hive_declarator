@@ -7,7 +7,7 @@ table, th, td {
   border-collapse: collapse;
 }
 .button {
-background-color: #03e8fc;
+background-color: #ffd500;
 border: none;
 color: white;
 padding: 5px 5px;
@@ -17,12 +17,22 @@ cursor: pointer;
 margin-bottom: 10px;
 }
 .button:hover {
-background-color: #40b7c2;
+background-color: #edb50c;
+}
+.button:focus {
+    border: none;
 }
 a {
 color: white;
 text-decoration: none;
 text-transform: uppercase;
+}
+body {
+        background-color: #0cc4f7;
+    }
+table {
+    background-color: white;
+    margin-top: 20px;
 }
 </style>
 </head>
@@ -30,7 +40,7 @@ text-transform: uppercase;
 <button class="button"><a href="../">back to rankings</a></button>
 
 {% if graph %}
-<div style="width:600;height:500">
+<div style="width:600;height:500;background-color:#0cc4f7;">
     {{ graph|safe }}
 </div>
 {% endif %}

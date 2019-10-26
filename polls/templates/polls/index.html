@@ -3,19 +3,23 @@
     <head>
     <style>
     .button {
-    background-color: #03e8fc;
+    background-color: #ffd500;
     border: none;
     color: white;
-    padding: 15px 25px;
+    padding: 25px 25px;
     text-align: center;
     font-size: 16px;
     cursor: pointer;
-    margin: 10px;
-    width: 100%;
+    margin: 20px;
+    border-radius: 50%;
     }
 
     .button:hover {
-    background-color: #40b7c2;
+    background-color: #edb50c;
+    }
+
+    .button:focus {
+    border: none;
     }
 
     a {
@@ -25,13 +29,23 @@
     }
 
     .button_group {
-    width: 136px; 
+    display: flex;
+    justify-content: center;
+    }
+
+    .headings {
+        text-align: center;
+        color: white;
+    }
+
+    body {
+        background-color: #0cc4f7;
     }
     </style>
     </head>
     <body>
 
-    <h2>Different Types of Rankings</h2>
+    <h2 class="headings">Different Types of Rankings</h2>
 
     <div class="button_group">
     {% for ranking in types_of_ranking %}
