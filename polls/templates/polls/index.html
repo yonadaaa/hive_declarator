@@ -1,9 +1,40 @@
 {% if types_of_ranking %}
+    <html>
+    <head>
+    <style>
+    .button {
+    background-color: #03e8fc;
+    border: none;
+    color: white;
+    padding: 15px 25px;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    }
+
+    .button:hover {
+    background-color: #40b7c2;
+    }
+
+    a {
+    color: white;
+    text-decoration: none;
+    text-transform: uppercase;
+    }
+    </style>
+    </head>
+    <body>
+
+    <h2>Different Types of Rankings</h2>
+
     <ul>
     {% for ranking in types_of_ranking %}
-        <li><a href="/rankings/{{ ranking }}/">{{ ranking }}</a></li>
+        <button class="button"><a href="/rankings/{{ ranking }}/">{{ ranking }}</a></button>
     {% endfor %}
     </ul>
+
+    </body>
+    </html>
 {% else %}
-    <p>No polls are available.</p>
+    <p>No rankingss are available.</p>
 {% endif %}
