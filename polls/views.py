@@ -9,13 +9,13 @@ def index(request):
     return render(request, 'polls/index.html', context)
 
 
-def get_declarations(field, year):
+def get_declarations(year):
     declarations = []
 
     # api-endpoint
     URL = "https://declarator.org/api/v1/search/sections"
     i = 0
-    while URL and i<5:
+    while URL and i<2:
         # defining a params dict for the parameters to be sent to the API
         PARAMS = {'year': year}
 
@@ -32,34 +32,9 @@ def get_declarations(field, year):
     return declarations
 
 
-def count_cars(field, year):
-    data = get_declarations(field, year)
+def count(year, counting_function):
+    declarations = get_declarations(year)
 
-    counts = {}
-    for decl in data['results']:
-        person_id = decl['main']['person']['id']
-        person_name = decl['main']['person']['given_name']
-        if person_id not in counts:
-            counts[person_id] = {'name': person_name, 'count': 0}
-        cars = decl[field]
-        counts[person_id]['count'] += len(cars)
-
-    return counts
-
-def cars(request):
-    field = "vehicles"
-    year = 2018
-    counts = count_cars(field, year)
-    response = " "
-    zesty = sorted(counts.items(), key=lambda kv: kv[1]['count'])
-    for i in range(len(zesty)):
-        response += "<p>{}: {} declared {} cars in {} </p>".format(i+1, zesty[i][1]['name'], zesty[i][1]['count'], year)
-
-    return HttpResponse(response)
-
-
-def count_income(field, year):
-    declarations = get_declarations(field, year)
     counts = {}
     for decl in declarations:
         personal_info = decl['main']['person']
@@ -67,17 +42,35 @@ def count_income(field, year):
         person_name = personal_info['name']
         if person_id not in counts:
             counts[person_id] = {'name': person_name, 'count': 0}
-        incomes = decl[field]
-        for income in incomes:
-            counts[person_id]['count'] += income["size"]
-
+        counts[person_id]['count'] = counting_function(decl)
     return counts
+
+
+def count_incomes(decl):
+    hi = decl["incomes"]
+    return sum(income["size"] for income in hi)
+
+
+def count_vehicles(decl):
+    return len(decl["vehicles"])
+
+
+def cars(request):
+    field = "vehicles"
+    year = 2018
+    counts = count(year, count_vehicles)
+    response = " "
+    zesty = sorted(counts.items(), key=lambda kv: kv[1]['count'], reverse=True)
+    for i in range(len(zesty)):
+        response += "<p>{}: {} declared {} cars in {} </p>".format(i+1, zesty[i][1]['name'], zesty[i][1]['count'], year)
+
+    return HttpResponse(response)
 
 
 def incomes(request):
     field = "incomes"
     year = 2018
-    counts = count_income(field, year)
+    counts = count(year, count_incomes)
     response = "<strong> Largest incomes for year {} in rub.</strong>".format(year)
     zesty = sorted(counts.items(), key=lambda kv: kv[1]['count'], reverse=True)
     for i in range(len(zesty)):
