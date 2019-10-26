@@ -13,20 +13,21 @@ def get_declarations(year):
     declarations = []
 
     # api-endpoint
-    URL = "https://declarator.org/api/v1/search/sections"
+    url = "https://declarator.org/api/v1/search/sections"
+    max_pages = 3
     i = 0
-    while URL and i<2:
+    while url and i<max_pages:
         # defining a params dict for the parameters to be sent to the API
-        PARAMS = {'year': year}
+        params = {'year': year}
 
         # sending get request and saving the response as response object
-        r = requests.get(url=URL, params=PARAMS)
+        r = requests.get(url=url, params=params)
 
         # extracting data in json format
         data = r.json()
         declarations += data["results"]
 
-        URL = data["next"]
+        url = data["next"]
         i += 1
 
     return declarations
@@ -46,43 +47,27 @@ def count(year, counting_function):
     return counts
 
 
-def count_incomes(decl):
-    hi = decl["incomes"]
-    return sum(income["size"] for income in hi)
+def count_incomes(declaration):
+    return sum(income["size"] for income in declaration["incomes"])
 
 
-def count_vehicles(decl):
-    return len(decl["vehicles"])
+def count_vehicles(declaration):
+    return len(declaration["vehicles"])
 
 
 def cars(request):
-    field = "vehicles"
     year = 2018
     counts = count(year, count_vehicles)
-    response = " "
-    zesty = sorted(counts.items(), key=lambda kv: kv[1]['count'], reverse=True)
-    for i in range(len(zesty)):
-        response += "<p>{}: {} declared {} cars in {} </p>".format(i+1, zesty[i][1]['name'], zesty[i][1]['count'], year)
+    zesty = sorted(counts.values(), key=lambda v: v['count'], reverse=True)
 
-    return HttpResponse(response)
+    context = {'rankings': zesty}
+    return render(request, 'polls/display_rankings.html', context)
 
 
 def incomes(request):
-    field = "incomes"
     year = 2018
     counts = count(year, count_incomes)
-    response = "<strong> Largest incomes for year {} in rub.</strong>".format(year)
-    zesty = sorted(counts.items(), key=lambda kv: kv[1]['count'], reverse=True)
-    for i in range(len(zesty)):
-        response += "<p>{}: {} with {}₽</p>".format(i+1, zesty[i][1]['name'], int(zesty[i][1]['count']))
+    zesty = sorted(counts.values(), key=lambda v: v['count'], reverse=True)
 
-    return HttpResponse(response)
-
-
-# TODO is it Rubles?
-# wait I'm and idiot you can search for declarations not personal info
-
-
-# decleration is made of family_name, given_name, id, name, patronymic_name, sections
-
-# sections may be broken up into different objects depending on positions served?
+    context = {'rankings': zesty}
+    return render(request, 'polls/display_rankings.html', context)
