@@ -1,6 +1,8 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 import requests
+import plotly.graph_objs as go
+import plotly.offline as opy
 
 
 def index(request):
@@ -14,7 +16,7 @@ def get_declarations(year):
 
     # api-endpoint
     url = "https://declarator.org/api/v1/search/sections"
-    max_pages = 3
+    max_pages = 2
     i = 0
     while url and i<max_pages:
         # defining a params dict for the parameters to be sent to the API
@@ -70,7 +72,15 @@ def incomes(request):
     zesty = sorted(counts.values(), key=lambda v: v['count'], reverse=True)
 
     for d in zesty:
-        d["count"] = str(int(d["count"])) + "₽"
+        d["count"] = int(d["count"])
 
-    context = {'rankings': zesty}
+    fig = go.Figure(
+        data=[go.Bar(x=[value["name"] for value in zesty],
+                     y=[value["count"] for value in zesty])],
+        layout_title_text="Incomes per person idk"
+    )
+    div = opy.plot(fig, auto_open=False, output_type='div')
+
+    context = {'rankings': zesty, 'graph': div}
     return render(request, 'polls/display_rankings.html', context)
+

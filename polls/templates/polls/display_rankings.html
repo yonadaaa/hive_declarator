@@ -11,6 +11,12 @@ table, th, td {
 <body>
 <button class="button"><a href="../">back</a></button>
 
+{% if graph %}
+<div style="width:600;height:500">
+    {{ graph|safe }}
+</div>
+{% endif %}
+
 {% if rankings %}
     <table style="width:40%">
         <caption>Table</caption>
