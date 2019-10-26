@@ -6,14 +6,31 @@ table, th, td {
   border: 1px solid black;
   border-collapse: collapse;
 }
+.button {
+background-color: #03e8fc;
+border: none;
+color: white;
+padding: 5px 5px;
+text-align: center;
+font-size: 16px;
+cursor: pointer;
+margin-bottom: 10px;
+}
+.button:hover {
+background-color: #40b7c2;
+}
+a {
+color: white;
+text-decoration: none;
+text-transform: uppercase;
+}
 </style>
 </head>
 <body>
-<button class="button"><a href="../">back</a></button>
+<button class="button"><a href="../">back to rankings</a></button>
 
 {% if rankings %}
     <table style="width:40%">
-        <caption>Table</caption>
         <tr>
          <th>Name</th>
          <th>Count</th>
