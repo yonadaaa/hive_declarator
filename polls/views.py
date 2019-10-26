@@ -2,6 +2,7 @@ from django.shortcuts import render
 import requests
 import plotly.graph_objs as go
 import plotly.offline as opy
+import json
 
 
 def index(request):
@@ -10,7 +11,7 @@ def index(request):
     return render(request, 'polls/index.html', context)
 
 
-def get_declarations(year):
+def get_declarations_from_api(year):
     declarations = []
 
     # api-endpoint
@@ -34,8 +35,15 @@ def get_declarations(year):
     return declarations
 
 
+def get_declarations_from_file():
+    filename = 'declarations_2018.json'
+    with open(filename) as json_file:
+        declarations = json.load(json_file)
+    return declarations
+
+
 def count(year, counting_function):
-    declarations = get_declarations(year)
+    declarations = get_declarations_from_file()
 
     counts = {}
     for declaration in declarations:
@@ -49,7 +57,7 @@ def count(year, counting_function):
 
 
 def count_incomes(declaration):
-    return sum(income["size"] for income in declaration["incomes"])
+    return int(sum(income["size"] for income in declaration["incomes"]))
 
 
 def count_vehicles(declaration):
