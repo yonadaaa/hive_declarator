@@ -1,10 +1,12 @@
 from django.http import HttpResponse
+from django.shortcuts import render
 import requests
 
 
 def index(request):
-    # todo
-    return HttpResponse("insert some buttons here for the rankings/??? plz Aimee")
+    latest_question_list = ["fdsfsdj"]
+    context = {'latest_question_list': latest_question_list}
+    return render(request, 'polls/index.html', context)
 
 
 def get_declarations(field, year):
