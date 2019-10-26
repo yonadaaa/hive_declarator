@@ -92,7 +92,7 @@ def incomes(request):
     year = 2018
     counts = count(year, count_incomes)
 
-    context = rankings_context(counts, "Top 10 officials for income", "%{y:.0f}₽")
+    context = rankings_context(counts, "Top 10 officials for income", "₽%{y:.0f}")
     return render(request, 'polls/display_rankings.html', context)
 
 
