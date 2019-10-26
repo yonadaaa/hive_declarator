@@ -10,6 +10,8 @@
     text-align: center;
     font-size: 16px;
     cursor: pointer;
+    margin: 10px;
+    width: 100%;
     }
 
     .button:hover {
@@ -21,17 +23,21 @@
     text-decoration: none;
     text-transform: uppercase;
     }
+
+    .button_group {
+    width: 136px; 
+    }
     </style>
     </head>
     <body>
 
     <h2>Different Types of Rankings</h2>
 
-    <ul>
+    <div class="button_group">
     {% for ranking in types_of_ranking %}
         <button class="button"><a href="/rankings/{{ ranking }}/">{{ ranking }}</a></button>
     {% endfor %}
-    </ul>
+    </div>
 
     </body>
     </html>
