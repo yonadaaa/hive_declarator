@@ -16,8 +16,8 @@ def get_declarations(year):
     # api-endpoint
     url = "https://declarator.org/api/v1/search/sections"
     max_pages = 2
-    i = 0
-    while url and i < max_pages:
+    page_number = 0
+    while url and page_number < max_pages:
         # defining a params dict for the parameters to be sent to the API
         params = {'year': year}
 
@@ -29,7 +29,7 @@ def get_declarations(year):
         declarations += data["results"]
 
         url = data["next"]
-        i += 1
+        page_number += 1
 
     return declarations
 
