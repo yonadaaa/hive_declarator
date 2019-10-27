@@ -5,9 +5,28 @@ import plotly.offline as opy
 import json
 
 
+def count_with_family_name(year, counting_function):
+    declarations = get_declarations_from_file()
+
+    counts = {}
+    for declaration in declarations:
+        personal_info = declaration['main']['person']
+        person_id = personal_info['id']
+        person_name = personal_info['family_name']
+        if person_id not in counts:
+            counts[person_id] = {'name': person_name, 'count': 0}
+        counts[person_id]['count'] = counting_function(declaration)
+    return counts
+
+
 def index(request):
     types_of_ranking = ["cars", "incomes", "properties"]
-    context = {'types_of_ranking': types_of_ranking}
+
+    year = 2018
+    counts = count_with_family_name(year, count_vehicles)
+    bleh = rankings_context(counts, "Top 10 officials for vehicle ownership", "%{y:.0f} vehicles")
+
+    context = {'types_of_ranking': types_of_ranking, 'graph': bleh["graph"]}
     return render(request, 'polls/index.html', context)
 
 

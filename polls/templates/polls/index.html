@@ -44,12 +44,18 @@
     </style>
     </head>
     <body>
-
     <h2 class="headings">Different Types of Rankings</h2>
 
     <div class="button_group">
     {% for ranking in types_of_ranking %}
-        <button class="button"><a href="/rankings/{{ ranking }}/">{{ ranking }}</a></button>
+        <div>
+            {% if graph %}
+            <div style="width:400;height:400;background-color:#0cc4f7;">
+                {{ graph|safe }}
+            </div>
+            {% endif %}
+            <button class="button"><a href="/rankings/{{ ranking }}/">{{ ranking }}</a></button>
+        </div>
     {% endfor %}
     </div>
 
