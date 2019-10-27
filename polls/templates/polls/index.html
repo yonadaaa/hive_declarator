@@ -54,7 +54,7 @@
     <div class="button_group">
     {% for ranking in hello %}
         <div>
-            <div style="width:250;height:250;background-color:#0cc4f7;">
+            <div style="width:300;height:300;background-color:#0cc4f7;">
                 {{ ranking.graph|safe }}
             </div>
             <button class="button"><a href="/rankings/{{ ranking.name }}/">{{ ranking.name }}</a></button>

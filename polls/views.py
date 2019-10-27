@@ -5,6 +5,29 @@ import plotly.offline as opy
 import json
 
 
+def rankings_context_homepage(counts, title, hover_template):
+    sorted_counts = sorted(counts.values(), key=lambda v: v['count'], reverse=True)
+
+    div = graph_div_homepage(sorted_counts[:10], title, hover_template)
+
+    return {'graph': div}
+
+
+def graph_div_homepage(counts, layout_title_text, hover_template):
+    fig = go.Figure(
+        data=[go.Bar(x=[value["name"] for value in counts],
+                     y=[value["count"] for value in counts],
+                     hovertemplate=hover_template,
+                     )],
+        layout_title_text=layout_title_text,
+    )
+    fig.update_layout(
+        margin=go.layout.Margin(l=8, r=8, b=8, t=8, pad=0)
+    )
+    div = opy.plot(fig, auto_open=False, output_type='div')
+    return div
+
+
 def count_with_family_name(year, counting_function):
     declarations = get_declarations_from_file()
 
@@ -27,7 +50,7 @@ def index(request):
     hello = []
     for i in range(len(types_of_ranking)):
         counts = count_with_family_name(year, counting_functions[i])
-        bleh = rankings_context(counts, "Top 10 officials for vehicle ownership", "%{y:.0f} vehicles")
+        bleh = rankings_context_homepage(counts, "", "%{y:.0f}")
         hello.append({"graph": bleh["graph"], "name": types_of_ranking[i]})
 
     context = {'hello': hello}
@@ -89,6 +112,7 @@ def count_vehicles(declaration):
 
 def count_properties(declaration):
     return len(declaration["real_estates"])
+
 
 def count_land(declaration):
     sum = 0
