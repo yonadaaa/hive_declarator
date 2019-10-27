@@ -6,7 +6,7 @@ import json
 
 
 def index(request):
-    types_of_ranking = ["cars", "incomes", "properties"]
+    types_of_ranking = ["cars", "incomes", "properties", "land"]
     context = {'types_of_ranking': types_of_ranking}
     return render(request, 'polls/index.html', context)
 
@@ -67,6 +67,9 @@ def count_vehicles(declaration):
 def count_properties(declaration):
     return len(declaration["real_estates"])
 
+def count_land(declaration):
+    return int(sum(real_estate["square"] for real_estate in declaration["real_estates"] if real_estate["square"]))
+
 
 def graph_div(counts, layout_title_text, hover_template):
     fig = go.Figure(
@@ -95,7 +98,7 @@ def cars(request):
     year = 2018
     counts = count(year, count_vehicles)
 
-    context = rankings_context(counts, "Top 10 officials for vehicle ownership", "%{y:.0f} vehicles")
+    context = rankings_context(counts, "Top 20 officials for vehicle ownership", "%{y:.0f} vehicles")
     return render(request, 'polls/display_rankings.html', context)
 
 
@@ -103,7 +106,7 @@ def incomes(request):
     year = 2018
     counts = count(year, count_incomes)
 
-    context = rankings_context(counts, "Top 10 officials for income", "₽%{y:.0f}")
+    context = rankings_context(counts, "Top 20 officials for income", "₽%{y:.0f}")
     return render(request, 'polls/display_rankings.html', context)
 
 
@@ -111,5 +114,12 @@ def properties(request):
     year = 2018
     counts = count(year, count_properties)
 
-    context = rankings_context(counts, "Top 10 officials for property ownership", "%{y:.0f} properties")
+    context = rankings_context(counts, "Top 20 officials for property ownership", "%{y:.0f} properties")
+    return render(request, 'polls/display_rankings.html', context)
+
+def land_owned(request):
+    year = 2018
+    counts = count(year, count_land)
+
+    context = rankings_context(counts, "Top 20 officials for land ownership", "%{y:.0f} square metres")
     return render(request, 'polls/display_rankings.html', context)
