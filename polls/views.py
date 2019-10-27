@@ -158,9 +158,21 @@ def rankings_context(counts, party_counts, title, party_title, hover_template):
         sorted_counts[i]["rank"] = i+1
 
     div = graph_div(sorted_counts[:20], title, hover_template)
-    party_div = graph_div(sorted_party_counts, party_title, hover_template)
+    party_div = party_graph_div(sorted_party_counts, party_title, hover_template)
 
     return {'rankings': sorted_counts, 'graph': div, "party_graph": party_div}
+
+
+def party_graph_div(counts, layout_title_text, hover_template):
+    fig = go.Figure(
+        data=[go.Bar(x=[value["name"] for value in counts],
+                     y=[value["count"] for value in counts],
+                     hovertemplate=hover_template,
+                     )],
+        layout_title_text=layout_title_text,
+    )
+    div = opy.plot(fig, auto_open=False, output_type='div')
+    return div
 
 
 def vehicles(request):
@@ -174,6 +186,7 @@ def vehicles(request):
                                "Top 20 officials for vehicle ownership",
                                "Vehicle ownership by party",
                                "%{y:.0f} vehicles")
+    context["table_title"] = "Officials ranked in order of vehicles owned"
     return render(request, 'polls/display_rankings.html', context)
 
 
@@ -189,6 +202,7 @@ def incomes(request):
                                "Top 20 officials for income",
                                "Total income by party",
                                "₽%{y:.0f}")
+    context["table_title"] = "Officials ranked in order of income"
     return render(request, 'polls/display_rankings.html', context)
 
 
@@ -203,6 +217,7 @@ def properties(request):
                                "Top 20 officials for property ownership",
                                "Properties owned by party",
                                "%{y:.0f} properties")
+    context["table_title"] = "Officials ranked in order of properties owned"
     return render(request, 'polls/display_rankings.html', context)
 
 
@@ -217,4 +232,5 @@ def land_owned(request):
                                "Top 20 officials for land ownership",
                                "Land ownership by party",
                                "%{y:.0f} square metres")
+    context["table_title"] = "Officials ranked in order of land owned"
     return render(request, 'polls/display_rankings.html', context)
