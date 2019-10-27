@@ -97,8 +97,7 @@ def count_by_party(declarations, year, counting_function):
         if party_info:
             if party_info["id"] not in counts:
                 counts[party_info["id"]] = {'name': party_info["name"], 'count': 0}
-            counts[party_info["id"]]['count'] = counting_function(declaration)
-            counts[party_info["id"]]['count'] = counting_function(declaration)
+            counts[party_info["id"]]['count'] += counting_function(declaration)
     return counts
 
 
