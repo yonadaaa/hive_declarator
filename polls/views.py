@@ -87,7 +87,14 @@ def count_properties(declaration):
     return len(declaration["real_estates"])
 
 def count_land(declaration):
-    return int(sum(real_estate["square"] for real_estate in declaration["real_estates"] if real_estate["square"]))
+    sum = 0
+    for real_estate in declaration["real_estates"]:
+        if real_estate["square"]:
+            if real_estate["share"]:
+                sum += real_estate["share"]*real_estate["square"]
+            else:
+                sum += real_estate["square"]
+    return int(sum)
 
 
 def graph_div(counts, layout_title_text, hover_template):
