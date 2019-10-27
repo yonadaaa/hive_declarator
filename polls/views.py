@@ -43,7 +43,7 @@ def count_with_family_name(year, counting_function):
 
 
 def index(request):
-    types_of_ranking = ["cars", "incomes", "properties", "land"]
+    types_of_ranking = ["vehicles", "incomes", "properties", "land"]
     counting_functions = [count_vehicles, count_incomes, count_properties, count_land]
 
     year = 2018
@@ -148,7 +148,7 @@ def rankings_context(counts, title, hover_template):
     return {'rankings': sorted_counts, 'graph': div}
 
 
-def cars(request):
+def vehicles(request):
     year = 2018
     counts = count(year, count_vehicles)
 

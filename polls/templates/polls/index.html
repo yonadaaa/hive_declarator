@@ -14,6 +14,7 @@
     border-radius: 50%;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 20px;
+    display: inline-block;
     }
 
     .button:hover {
@@ -45,6 +46,11 @@
     body {
         background-color: #0cc4f7;
     }
+
+    .parent {
+        text-align: center;
+        margin: 5px;
+    }
     </style>
     </head>
     <body>
@@ -53,7 +59,7 @@
 
     <div class="button_group">
     {% for ranking in hello %}
-        <div>
+        <div class="parent">
             <div style="width:300;height:300;background-color:#0cc4f7;">
                 {{ ranking.graph|safe }}
             </div>
