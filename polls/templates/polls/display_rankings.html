@@ -48,11 +48,13 @@ table {
 {% if rankings %}
     <table style="width:40%">
         <tr>
-         <th>Name</th>
-         <th>Count</th>
+            <th>Rank</th>
+            <th>Name</th>
+            <th>Count</th>
         </tr>
         {% for entry in rankings %}
             <tr>
+            <td>{{entry.rank}} </td>
             <td>{{entry.name}} </td>
             <td>{{entry.count}} </td>
         {% endfor %}

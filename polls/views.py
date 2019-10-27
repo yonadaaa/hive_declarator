@@ -83,7 +83,10 @@ def graph_div(counts, layout_title_text, hover_template):
 def rankings_context(counts, title, hover_template):
     sorted_counts = sorted(counts.values(), key=lambda v: v['count'], reverse=True)
 
-    div = graph_div(sorted_counts[:10], title, hover_template)
+    for i in range(len(sorted_counts)):
+        sorted_counts[i]["rank"] = i+1
+
+    div = graph_div(sorted_counts[:20], title, hover_template)
 
     return {'rankings': sorted_counts, 'graph': div}
 
