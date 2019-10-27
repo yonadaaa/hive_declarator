@@ -22,7 +22,7 @@ def graph_div_homepage(counts, layout_title_text, hover_template):
         layout_title_text=layout_title_text,
     )
     fig.update_layout(
-        margin=go.layout.Margin(l=8, r=8, b=8, t=8, pad=0)
+        margin=go.layout.Margin(l=8, r=8, b=8, t=35, pad=0)
     )
     div = opy.plot(fig, auto_open=False, output_type='div')
     return div
@@ -45,12 +45,13 @@ def count_with_family_name(year, counting_function):
 def index(request):
     types_of_ranking = ["vehicles", "incomes", "properties", "land"]
     counting_functions = [count_vehicles, count_incomes, count_properties, count_land]
+    graph_titles = ["Top 10 for most vehicles owned", "Top 10 for income", "Top 10 for property ownership" ,"Top 10 for most land owned"]
 
     year = 2018
     hello = []
     for i in range(len(types_of_ranking)):
         counts = count_with_family_name(year, counting_functions[i])
-        bleh = rankings_context_homepage(counts, "", "%{y:.0f}")
+        bleh = rankings_context_homepage(counts, graph_titles[i], "%{y:.0f}")
         hello.append({"graph": bleh["graph"], "name": types_of_ranking[i]})
 
     context = {'hello': hello}
