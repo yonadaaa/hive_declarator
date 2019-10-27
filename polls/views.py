@@ -21,12 +21,16 @@ def count_with_family_name(year, counting_function):
 
 def index(request):
     types_of_ranking = ["cars", "incomes", "properties", "land"]
+    counting_functions = [count_vehicles, count_incomes, count_properties, count_land]
 
     year = 2018
-    counts = count_with_family_name(year, count_vehicles)
-    bleh = rankings_context(counts, "Top 10 officials for vehicle ownership", "%{y:.0f} vehicles")
+    hello = []
+    for i in range(len(types_of_ranking)):
+        counts = count_with_family_name(year, counting_functions[i])
+        bleh = rankings_context(counts, "Top 10 officials for vehicle ownership", "%{y:.0f} vehicles")
+        hello.append({"graph": bleh["graph"], "name": types_of_ranking[i]})
 
-    context = {'types_of_ranking': types_of_ranking, 'graph': bleh["graph"]}
+    context = {'hello': hello}
     return render(request, 'polls/index.html', context)
 
 

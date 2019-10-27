@@ -1,4 +1,4 @@
-{% if types_of_ranking %}
+{% if hello %}
     <html>
     <head>
     <style>
@@ -52,14 +52,12 @@
     <h2 class="headings">What factor would you like to compare today?</h2>
 
     <div class="button_group">
-    {% for ranking in types_of_ranking %}
+    {% for ranking in hello %}
         <div>
-            {% if graph %}
-            <div style="width:400;height:400;background-color:#0cc4f7;">
-                {{ graph|safe }}
+            <div style="width:250;height:250;background-color:#0cc4f7;">
+                {{ ranking.graph|safe }}
             </div>
-            {% endif %}
-            <button class="button"><a href="/rankings/{{ ranking }}/">{{ ranking }}</a></button>
+            <button class="button"><a href="/rankings/{{ ranking.name }}/">{{ ranking.name }}</a></button>
         </div>
     {% endfor %}
     </div>
