@@ -21,8 +21,6 @@ def count_with_family_name(year, counting_function):
 
 def index(request):
     types_of_ranking = ["cars", "incomes", "properties", "land"]
-    context = {'types_of_ranking': types_of_ranking}
-    types_of_ranking = ["cars", "incomes", "properties"]
 
     year = 2018
     counts = count_with_family_name(year, count_vehicles)
@@ -137,6 +135,7 @@ def properties(request):
 
     context = rankings_context(counts, "Top 20 officials for property ownership", "%{y:.0f} properties")
     return render(request, 'polls/display_rankings.html', context)
+
 
 def land_owned(request):
     year = 2018
