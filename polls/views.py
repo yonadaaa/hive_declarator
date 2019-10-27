@@ -89,8 +89,20 @@ def get_declarations_from_file():
     return declarations
 
 
-def count(year, counting_function):
-    declarations = get_declarations_from_file()
+def count_by_party(declarations, year, counting_function):
+
+    counts = {}
+    for declaration in declarations:
+        party_info = declaration['main']['party']
+        if party_info:
+            if party_info["id"] not in counts:
+                counts[party_info["id"]] = {'name': party_info["name"], 'count': 0}
+            counts[party_info["id"]]['count'] = counting_function(declaration)
+            counts[party_info["id"]]['count'] = counting_function(declaration)
+    return counts
+
+
+def count(declarations, year, counting_function):
 
     counts = {}
     for declaration in declarations:
@@ -138,44 +150,71 @@ def graph_div(counts, layout_title_text, hover_template):
     return div
 
 
-def rankings_context(counts, title, hover_template):
+def rankings_context(counts, party_counts, title, party_title, hover_template):
     sorted_counts = sorted(counts.values(), key=lambda v: v['count'], reverse=True)
+    sorted_party_counts = sorted(party_counts.values(), key=lambda v: v['count'], reverse=True)
 
     for i in range(len(sorted_counts)):
         sorted_counts[i]["rank"] = i+1
 
     div = graph_div(sorted_counts[:20], title, hover_template)
+    party_div = graph_div(sorted_party_counts, party_title, hover_template)
 
-    return {'rankings': sorted_counts, 'graph': div}
+    return {'rankings': sorted_counts, 'graph': div, "party_graph": party_div}
 
 
 def vehicles(request):
     year = 2018
-    counts = count(year, count_vehicles)
+    declarations = get_declarations_from_file()
+    counts = count(declarations, year, count_vehicles)
+    party_counts = count_by_party(declarations, year, count_vehicles)
 
-    context = rankings_context(counts, "Top 20 officials for vehicle ownership", "%{y:.0f} vehicles")
+    context = rankings_context(counts,
+                               party_counts,
+                               "Top 20 officials for vehicle ownership",
+                               "Vehicle ownership by party",
+                               "%{y:.0f} vehicles")
     return render(request, 'polls/display_rankings.html', context)
 
 
 def incomes(request):
     year = 2018
-    counts = count(year, count_incomes)
+    declarations = get_declarations_from_file()
 
-    context = rankings_context(counts, "Top 20 officials for income", "₽%{y:.0f}")
+    counts = count(declarations, year, count_incomes)
+    party_counts = count_by_party(declarations, year, count_incomes)
+
+    context = rankings_context(counts,
+                               party_counts,
+                               "Top 20 officials for income",
+                               "Total income by party",
+                               "₽%{y:.0f}")
     return render(request, 'polls/display_rankings.html', context)
 
 
 def properties(request):
     year = 2018
-    counts = count(year, count_properties)
+    declarations = get_declarations_from_file()
+    counts = count(declarations, year, count_properties)
+    party_counts = count_by_party(declarations, year, count_properties)
 
-    context = rankings_context(counts, "Top 20 officials for property ownership", "%{y:.0f} properties")
+    context = rankings_context(counts,
+                               party_counts,
+                               "Top 20 officials for property ownership",
+                               "Properties owned by party",
+                               "%{y:.0f} properties")
     return render(request, 'polls/display_rankings.html', context)
 
 
 def land_owned(request):
     year = 2018
-    counts = count(year, count_land)
+    declarations = get_declarations_from_file()
+    counts = count(declarations, year, count_land)
+    party_counts = count_by_party(declarations, year, count_land)
 
-    context = rankings_context(counts, "Top 20 officials for land ownership", "%{y:.0f} square metres")
+    context = rankings_context(counts,
+                               party_counts,
+                               "Top 20 officials for land ownership",
+                               "Land ownership by party",
+                               "%{y:.0f} square metres")
     return render(request, 'polls/display_rankings.html', context)
