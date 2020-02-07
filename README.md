@@ -1,6 +1,7 @@
 # hive_declarator
 A Django application to visualise corruption statistics in Russian government officials. Built using Python Django and plotly. 
-Made for Hack.Moscow 2019
+
+Made for [Hack.Moscow](https://hack.moscow/) 2019.
 
 ## Screenshots
 ### Graph metrics like income and land ownage
